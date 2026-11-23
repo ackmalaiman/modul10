@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Sapa Menggunakan AJAX dan PHP</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: white;
+            width: 400px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            display: block;
+            margin: auto;
+            padding: 10px 25px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        h3 {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        #response {
+            padding: 15px;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .error {
+            background-color: #ffe5e5 !important;
+            color: #a94442;
+            border-color: #e0aaaa !important;
+        }
+
+        .success {
+            background-color: #e5ffe9 !important;
+            color: #286b36;
+            border-color: #a5d6ae !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Form Sapa Menggunakan AJAX dan PHP</h2>
+
+        <form id="namaForm">
+            <label for="nama">Masukkan Nama Anda:</label>
+
+            <input type="text" id="nama" name="nama"
+                   placeholder="Contoh: Alex">
+
+            <button type="submit">Kirim</button>
+        </form>
+
+        <h3>Respon Server:</h3>
+
+        <div id="response">Menunggu input...</div>
+    </div>
+
+    <script>
+        document.getElementById("namaForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const nama = document.getElementById("nama").value;
+            const response = document.getElementById("response");
+
+            const formData = new FormData();
+            formData.append("nama", nama);
+
+            fetch("server.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(result => result.text())
+            .then(data => {
+                response.textContent = data;
+
+                if (data.includes("tidak boleh kosong")) {
+                    response.className = "error";
+                } else {
+                    response.className = "success";
+                }
+            })
+            .catch(error => {
+                response.textContent = "Terjadi kesalahan pada server!";
+                response.className = "error";
+            });
+        });
+    </script>
+
+</body>
+</html>
